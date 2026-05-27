@@ -1,0 +1,33 @@
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Office / Word temp files
+~$*.doc*
+
+# LaTeX / Tex temp files
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.pdfsync
+*.blg
+*.bbl
+*.fdb_latexmk
+*.fls
+*.run.xml
+*-blx.bib
+
+# Python / virtual envs (if any)
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+.env
+
+# Backups and archives
+*.zip
+*.tar.gz
+*.rar
