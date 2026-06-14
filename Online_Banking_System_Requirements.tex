@@ -18,6 +18,28 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta, positioning, shapes.geometric, shadows, fit}
 
+% Custom stickman actor macro for standard UML actor notation
+\newcommand{\drawactor}[4]{ % #1: X coordinate, #2: Y coordinate, #3: node name, #4: label text
+  \draw[thick, primaryblue, fill=primaryblue!10] (#1,#2+0.3) circle (0.15); % head
+  \draw[thick, primaryblue] (#1,#2+0.15) -- (#1,#2-0.2); % torso
+  \draw[thick, primaryblue] (#1-0.25,#2) -- (#1+0.25,#2); % arms
+  \draw[thick, primaryblue] (#1,#2-0.2) -- (#1-0.15,#2-0.5); % left leg
+  \draw[thick, primaryblue] (#1,#2-0.2) -- (#1+0.15,#2-0.5); % right leg
+  \node[below, font=\scriptsize\bfseries, text=darkgray, align=center] at (#1,#2-0.5) {#4};
+  \node[minimum width=0.6cm, minimum height=1.1cm, inner sep=0pt] (#3) at (#1,#2-0.1) {};
+}
+
+
+% Activity Diagram Flowchart Styles
+\tikzset{
+    actstart/.style={circle, draw=primaryblue, fill=primaryblue, minimum size=0.35cm, inner sep=0pt},
+    actend/.style={circle, draw=primaryblue, fill=primaryblue, minimum size=0.35cm, double, double distance=1.2pt, inner sep=0pt},
+    activity/.style={rectangle, draw=secondaryblue, fill=lightbg, rounded corners, minimum width=2.4cm, minimum height=0.7cm, align=center, font=\scriptsize, thick, drop shadow},
+    decision/.style={diamond, draw=accentteal, fill=lightbg, minimum width=0.8cm, minimum height=0.8cm, align=center, font=\scriptsize, thick, drop shadow},
+    flow/.style={draw=darkgray, thick, -{Latex[scale=0.8]}},
+}
+
+
 % --- Color Palette Definition ---
 \definecolor{primaryblue}{RGB}{26, 54, 93}   % Deep Navy
 \definecolor{secondaryblue}{RGB}{43, 108, 176}% Slate Blue
@@ -68,7 +90,6 @@
         \begin{tabular}{rl}
             \textbf{Student Name:} & Ahmad Ghanavati \\
             \textbf{Student ID:} & 40273116 \\
-            \textbf{Instructor:} & \underline{\hspace{6cm}} \\
             \textbf{Academic Term:} & Spring Semester, Khordad 1405 (June 2026) \\
         \end{tabular}
     \end{minipage}
@@ -129,8 +150,9 @@ The requirements are organized into eight operational categories and mapped in t
 \centering
 \caption{Online Banking System - Functional Requirements Specification (Part 1)}
 \label{tab:functional_reqs_1}
-\small
-\begin{tabular}{p{2.2cm} p{2.6cm} p{4.2cm} p{6.0cm}}
+\footnotesize
+\singlespacing
+\begin{tabular}{p{2.0cm} p{2.2cm} p{3.8cm} p{5.4cm}}
 \toprule
 \textbf{Req. ID} & \textbf{Category} & \textbf{User Requirement} & \textbf{System Requirement ("Shall" wording)} \\ \midrule
 
@@ -152,14 +174,13 @@ The requirements are organized into eight operational categories and mapped in t
 \end{tabular}
 \end{table}
 
-\newpage
-
 \begin{table}[H]
 \centering
 \caption{Online Banking System - Functional Requirements Specification (Part 2)}
 \label{tab:functional_reqs_2}
-\small
-\begin{tabular}{p{2.2cm} p{2.6cm} p{4.2cm} p{6.0cm}}
+\footnotesize
+\singlespacing
+\begin{tabular}{p{2.0cm} p{2.2cm} p{3.8cm} p{5.4cm}}
 \toprule
 \textbf{Req. ID} & \textbf{Category} & \textbf{User Requirement} & \textbf{System Requirement ("Shall" wording)} \\ \midrule
 
@@ -181,14 +202,13 @@ The requirements are organized into eight operational categories and mapped in t
 \end{tabular}
 \end{table}
 
-\newpage
-
 \begin{table}[H]
 \centering
 \caption{Online Banking System - Functional Requirements Specification (Part 3)}
 \label{tab:functional_reqs_3}
-\small
-\begin{tabular}{p{2.2cm} p{2.6cm} p{4.2cm} p{6.0cm}}
+\footnotesize
+\singlespacing
+\begin{tabular}{p{2.0cm} p{2.2cm} p{3.8cm} p{5.4cm}}
 \toprule
 \textbf{Req. ID} & \textbf{Category} & \textbf{User Requirement} & \textbf{System Requirement ("Shall" wording)} \\ \midrule
 
@@ -212,10 +232,11 @@ Non-functional requirements (NFRs) define the system's operational constraints, 
 
 \begin{table}[H]
 \centering
-\caption{Online Banking System - Non-Functional Requirements Matrix}
-\label{tab:nonfunctional_reqs}
-\small
-\begin{tabular}{p{2.2cm} p{2.6cm} p{4.2cm} p{6.0cm}}
+\caption{Online Banking System - Non-Functional Requirements Matrix (Part 1)}
+\label{tab:nonfunctional_reqs_1}
+\footnotesize
+\singlespacing
+\begin{tabular}{p{2.0cm} p{2.2cm} p{3.8cm} p{5.4cm}}
 \toprule
 \textbf{Req. ID} & \textbf{Category} & \textbf{User Requirement} & \textbf{System Requirement (Quantitative \& Testable)} \\ \midrule
 
@@ -229,7 +250,21 @@ Non-functional requirements (NFRs) define the system's operational constraints, 
 
 \textbf{OBS-NFR-05} \newline \textit{\small [Must]} & Performance & Page loads must be fast even under heavy usage. & The system \textbf{shall} load and display individual user dashboard pages in less than 2.0 seconds under normal conditions and less than 3.0 seconds under peak load. \\ \midrule
 
-\textbf{OBS-NFR-06} \newline \textit{\small [Should]} & Scalability & The system should support many users concurrently. & The platform application architecture \textbf{shall} maintain standard operation at up to 100,000 concurrent active user sessions without showing throughput degradation. \\ \midrule
+\textbf{OBS-NFR-06} \newline \textit{\small [Should]} & Scalability & The system should support many users concurrently. & The platform application architecture \textbf{shall} maintain standard operation at up to 100,000 concurrent active user sessions without showing throughput degradation. \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\newpage
+
+\begin{table}[H]
+\centering
+\caption{Online Banking System - Non-Functional Requirements Matrix (Part 2)}
+\label{tab:nonfunctional_reqs_2}
+\footnotesize
+\singlespacing
+\begin{tabular}{p{2.0cm} p{2.2cm} p{3.8cm} p{5.4cm}}
+\toprule
+\textbf{Req. ID} & \textbf{Category} & \textbf{User Requirement} & \textbf{System Requirement (Quantitative \& Testable)} \\ \midrule
 
 \textbf{OBS-NFR-07} \newline \textit{\small [Must]} & Availability & The online banking portal must stay online constantly. & The system \textbf{shall} maintain an overall service availability uptime of 99.99\% over any given calendar month, restricting planned downtime to pre-announced hours. \\ \midrule
 
@@ -256,6 +291,8 @@ To provide greater detail for the key functional areas of the system, this secti
 % Transaction 1: User Registration
 \subsection{Core Transaction 1: User Registration \& MFA Setup}
 \begin{center}
+\small
+\singlespacing
 \begin{tabular}{p{4.0cm} p{11.0cm}}
 \toprule
 \multicolumn{2}{c}{\textbf{Structured Form-Based Specification: OBS-SRS-FR-01.00}} \\ \midrule
@@ -279,11 +316,13 @@ To provide greater detail for the key functional areas of the system, this secti
 \end{tabular}
 \end{center}
 
-\vspace{0.5cm}
+\newpage
 
 % Transaction 2: Secure Login
 \subsection{Core Transaction 2: Secure Login \& Session Initialization}
 \begin{center}
+\small
+\singlespacing
 \begin{tabular}{p{4.0cm} p{11.0cm}}
 \toprule
 \multicolumn{2}{c}{\textbf{Structured Form-Based Specification: OBS-SRS-FR-02.00}} \\ \midrule
@@ -312,6 +351,8 @@ To provide greater detail for the key functional areas of the system, this secti
 % Transaction 3: Fund Transfer
 \subsection{Core Transaction 3: Domestic Fund Transfer (Intra-Bank \& ACH/Wire)}
 \begin{center}
+\small
+\singlespacing
 \begin{tabular}{p{4.0cm} p{11.0cm}}
 \toprule
 \multicolumn{2}{c}{\textbf{Structured Form-Based Specification: OBS-SRS-FR-03.00}} \\ \midrule
@@ -337,11 +378,13 @@ To provide greater detail for the key functional areas of the system, this secti
 \end{tabular}
 \end{center}
 
-\vspace{0.5cm}
+\newpage
 
 % Transaction 4: Bill Payment
 \subsection{Core Transaction 4: Automatic Bill Payment \& Utility Registration}
 \begin{center}
+\small
+\singlespacing
 \begin{tabular}{p{4.0cm} p{11.0cm}}
 \toprule
 \multicolumn{2}{c}{\textbf{Structured Form-Based Specification: OBS-SRS-FR-04.00}} \\ \midrule
@@ -370,6 +413,8 @@ To provide greater detail for the key functional areas of the system, this secti
 % Transaction 5: Statement Generation
 \subsection{Core Transaction 5: Statement Generation \& PDF Export}
 \begin{center}
+\small
+\singlespacing
 \begin{tabular}{p{4.0cm} p{11.0cm}}
 \toprule
 \multicolumn{2}{c}{\textbf{Structured Form-Based Specification: OBS-SRS-FR-05.00}} \\ \midrule
@@ -396,75 +441,184 @@ To provide greater detail for the key functional areas of the system, this secti
 \newpage
 
 % =========================================================================
-% SECTION 5: GRAPHICAL UML NOTATIONS
+% SECTION 5: SYSTEM MODELING & GRAPHICAL UML NOTATIONS
 % =========================================================================
-\section{Graphical UML Notations}
+\section{System Modeling \& Graphical UML Notations}
 
-This section contains the UML diagrams modeling the structural boundaries and behavioral workflows of the Online Banking System.
+This section contains the graphical system models and UML diagrams outlining the operational boundary, roles, transactional workflows, and activity processes of the Online Banking System (OBS).
 
-\subsection{UML Use Case Diagram}
-The Use Case diagram below maps the relationships between the system boundary, the primary/secondary actors, and the core operational use cases.
+\subsection{System Operational Context Model}
+The System Operational Context Model establishes the boundary of the Online Banking System (OBS), categorizing the components into internal subsystems and external interfaces. The central OBS encompasses eight core internal subsystems responsible for user lifecycle and financial data transactions. The Authentication \& MFA subsystem manages secure sessions, while the Account Management and Funds Transfer subsystems handle direct ledger actions. Reporting \& Statement, Notification, Audit \& Logging, and Backup \& Recovery subsystems provide critical support functions ensuring reliability, transparency, and compliance.
+
+Surrounding the central system are the external entities that interact directly with the OBS. Human actors—including Individual Customers, Corporate Customers, Bank Tellers, and System Administrators—interface through browser and mobile client terminals. External automated systems interact via secure API channels: the Identity Verification Service validates signup credentials, the SMS Gateway handles out-of-band notifications, Utility Providers exchange billing tokens, and the Shetab/ACH/RTGS clearing house settles inter-bank transfers. This context model ensures a robust definition of system interfaces, security perimeters, and operational dependencies.
 
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
-    scale=0.75, transform shape, % Adjusted scale for perfect fit
+    scale=0.85, transform shape,
+    node distance=1.2cm and 1.8cm,
+    internal/.style={rectangle, draw=secondaryblue, fill=lightbg, minimum width=3.4cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries, rounded corners, thick, drop shadow},
+    external/.style={rectangle, draw=primaryblue, fill=primaryblue!10, minimum width=3cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries, rounded corners, thick, drop shadow},
+    boundary/.style={rectangle, draw=darkgray, dashed, fill=primaryblue!2, minimum width=8.5cm, minimum height=5.8cm, rounded corners, thick}
+]
+
+    % Internal Subsystems Grid inside the boundary
+    \node (sub1) [internal] at (-2.1, 1.8) {Authentication \& MFA};
+    \node (sub2) [internal] at (2.1, 1.8) {Account Management};
+    \node (sub3) [internal] at (-2.1, 0.6) {Funds Transfer};
+    \node (sub4) [internal] at (2.1, 0.6) {Bill Payment};
+    \node (sub5) [internal] at (-2.1, -0.6) {Reporting \& Statement};
+    \node (sub6) [internal] at (2.1, -0.6) {Notification};
+    \node (sub7) [internal] at (-2.1, -1.8) {Audit \& Logging};
+    \node (sub8) [internal] at (2.1, -1.8) {Backup \& Recovery};
+
+    % Central OBS Box label
+    \node (obs_label) [font=\small\bfseries\color{primaryblue}, yshift=0.3cm] at (0, 2.5) {Online Banking System (OBS) Boundary};
+
+    % Fitting a boundary box around them
+    \node (sys_box) [boundary, fit=(sub1) (sub2) (sub3) (sub4) (sub5) (sub6) (sub7) (sub8) (obs_label)] {};
+
+    % External Systems arranged around the boundary
+    % Left side
+    \node (ext_cust) [external, left=of sys_box.west, yshift=1.5cm] {Individual Customer};
+    \node (ext_corp) [external, left=of sys_box.west, yshift=-1.5cm] {Corporate Customer};
+
+    % Right side
+    \node (ext_teller) [external, right=of sys_box.east, yshift=1.5cm] {Bank Teller};
+    \node (ext_shetab) [external, right=of sys_box.east, yshift=-1.5cm] {Shetab/ACH/RTGS};
+
+    % Top side
+    \node (ext_admin) [external, above=of sys_box.north, xshift=-2.2cm] {System Administrator};
+    \node (ext_id) [external, above=of sys_box.north, xshift=2.2cm] {Identity Verification};
+
+    % Bottom side
+    \node (ext_sms) [external, below=of sys_box.south, xshift=-2.2cm] {SMS Gateway};
+    \node (ext_utility) [external, below=of sys_box.south, xshift=2.2cm] {Utility Providers};
+
+    % Connections
+    \draw [thick, -{Latex}, color=darkgray] (ext_cust) -- (sys_box.west |- ext_cust);
+    \draw [thick, -{Latex}, color=darkgray] (ext_corp) -- (sys_box.west |- ext_corp);
+    \draw [thick, -{Latex}, color=darkgray] (ext_teller) -- (sys_box.east |- ext_teller);
+    \draw [thick, -{Latex}, color=darkgray] (ext_shetab) -- (sys_box.east |- ext_shetab);
+    
+    \draw [thick, -{Latex}, color=darkgray] (ext_admin) -- (sys_box.north |- ext_admin.south);
+    \draw [thick, -{Latex}, color=darkgray] (ext_id) -- (sys_box.north |- ext_id.south);
+    \draw [thick, -{Latex}, color=darkgray] (ext_sms) -- (sys_box.south |- ext_sms.north);
+    \draw [thick, -{Latex}, color=darkgray] (ext_utility) -- (sys_box.south |- ext_utility.north);
+
+\end{tikzpicture}
+\caption{System Operational Context Model: Central system boundary containing internal subsystems and showing connections to external actors.}
+\label{fig:context_model}
+\end{figure}
+
+\newpage
+
+\subsection{UML Use Case Diagram}
+The Use Case Diagram details the interactions between the primary and secondary actors and the core transactional boundaries of the Online Banking System. The diagram identifies eight major functional use cases (UC1 to UC8) and maps them to their respective user roles. To satisfy standard UML specifications and rigorous visual criteria, all actors—including human operators and external system endpoints—are represented using standard stick-figure notations. 
+
+Furthermore, key dependency relationships are modeled. The Register Account (UC1) use case includes the validation of the National ID, MFA initialization, and OTP dispatch as mandatory sub-steps. Similarly, Login with MFA (UC2) depends on credential verification and OTP matching before generating a secure session. Funds Transfer (UC4), Pay Utility Bills (UC5), and Generate Statement (UC6) similarly integrate essential system checks and transaction logs via inclusions. This configuration provides a complete overview of the functional capabilities and security gates governing the application scope.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    scale=0.8, transform shape,
     node distance=1.5cm and 2.5cm,
-    usecase/.style={ellipse, draw=secondaryblue, fill=lightbg, minimum width=2.8cm, minimum height=1.1cm, align=center, font=\small, thick, drop shadow},
-    actor/.style={rectangle, draw=primaryblue, fill=primaryblue!10, minimum width=2cm, minimum height=1cm, rounded corners, font=\bfseries\small, thick},
-    boundary/.style={rectangle, draw=bordergray, fill=primaryblue!2, minimum width=9cm, minimum height=14.5cm, thick, rounded corners}
+    usecase/.style={ellipse, draw=secondaryblue, fill=lightbg, minimum width=2.5cm, minimum height=0.9cm, align=center, font=\scriptsize, thick, drop shadow},
+    subusecase/.style={ellipse, draw=accentteal, fill=lightbg, minimum width=2.2cm, minimum height=0.8cm, align=center, font=\tiny, thick, drop shadow},
+    boundary/.style={rectangle, draw=bordergray, fill=primaryblue!2, minimum width=8.5cm, minimum height=17cm, thick, rounded corners}
 ]
 
     % Draw System Boundary
-    \node (sys) [boundary, label={[anchor=north, font=\large\bfseries, text=primaryblue]north:Online Banking System (OBS)}] {};
-    
-    % Left Actors (Primary)
-    \node (cust) [actor, left=of sys.west, yshift=2.5cm] {Retail Customer};
-    \node (corp) [actor, left=of sys.west, yshift=-2.5cm] {Corporate Customer};
-    
-    % Right Actors (Supporting)
-    \node (admin) [actor, right=of sys.east, yshift=3.5cm] {System Admin};
-    \node (teller) [actor, right=of sys.east, yshift=0cm] {Bank Teller};
-    \node (shetab) [actor, right=of sys.east, yshift=-3.5cm] {Shetab Gateway API};
+    \node (sys) [boundary, label={[anchor=north, font=\normalsize\bfseries, text=primaryblue]north:Online Banking System (OBS) Boundary}] at (0, -0.5) {};
 
-    % Use Cases inside Boundary
-    \node (uc_reg) [usecase, parent anchor=center] at (0, 5) {Register \& Setup MFA};
-    \node (uc_auth) [usecase] at (0, 3) {Authenticate User};
-    \node (uc_bal) [usecase] at (0, 1.2) {View Balance};
-    \node (uc_trans) [usecase] at (0, -0.6) {Transfer Funds};
-    \node (uc_bill) [usecase] at (0, -2.4) {Pay Utility Bills};
-    \node (uc_rep) [usecase] at (0, -4.2) {Generate Statement};
-    \node (uc_sys) [usecase] at (0, -5.8) {Manage Backups};
+    % Left Actors
+    \drawactor{-6.5}{6.5}{id_ver}{Identity Verification\\Service}
+    \drawactor{-6.5}{2.5}{cust}{Individual\\Customer}
+    \drawactor{-6.5}{0.0}{corp}{Corporate\\Customer}
+    \drawactor{-6.5}{-3.5}{utility}{Utility\\Providers}
+
+    % Right Actors
+    \drawactor{6.5}{4.5}{admin}{System\\Admin}
+    \drawactor{6.5}{1.5}{teller}{Bank\\Teller}
+    \drawactor{6.5}{-1.5}{sms}{SMS\\Gateway}
+    \drawactor{6.5}{-4.5}{shetab}{Shetab Gateway\\API}
+
+    % Main Use Cases inside Boundary
+    \node (uc1) [usecase] at (0, 6.5) {Register Account\\(UC1)};
+    \node (uc2) [usecase] at (0, 4.5) {Login with MFA\\(UC2)};
+    \node (uc3) [usecase] at (0, 2.5) {View Balance\\(UC3)};
+    \node (uc4) [usecase] at (0, 0.5) {Transfer Funds\\(UC4)};
+    \node (uc5) [usecase] at (0, -1.5) {Pay Utility Bills\\(UC5)};
+    \node (uc6) [usecase] at (0, -3.5) {Generate Statement\\(UC6)};
+    \node (uc7) [usecase] at (0, -5.5) {Manage Backups\\(UC7)};
+    \node (uc8) [usecase] at (0, -7.5) {Review Logs\\(UC8)};
+
+    % Included Use Cases (Sub-use cases)
+    \node (uc1a) [subusecase] at (-2.2, 7.3) {Validate National ID};
+    \node (uc1b) [subusecase] at (2.2, 7.3) {Setup MFA};
+    
+    \node (uc2a) [subusecase] at (-2.2, 5.3) {Validate Credentials};
+    \node (uc2b) [subusecase] at (2.2, 5.3) {Verify OTP};
+    
+    \node (uc4a) [subusecase] at (-2.2, 1.3) {Validate Balance};
+    \node (uc4b) [subusecase] at (2.2, 1.3) {Validate Destination};
+    
+    \node (uc5a) [subusecase] at (-2.2, -0.7) {Verify Utility Bill};
+    \node (uc5b) [subusecase] at (2.2, -0.7) {Debit Account};
+    
+    \node (uc6a) [subusecase] at (-2.2, -2.7) {Filter Transactions};
+    \node (uc6b) [subusecase] at (2.2, -2.7) {Generate PDF};
+
+    % Draw Includes Relationships
+    \draw [dashed, thick, ->, >=stealth] (uc1) -- (uc1a);
+    \draw [dashed, thick, ->, >=stealth] (uc1) -- (uc1b);
+    \draw [dashed, thick, ->, >=stealth] (uc2) -- (uc2a);
+    \draw [dashed, thick, ->, >=stealth] (uc2) -- (uc2b);
+    \draw [dashed, thick, ->, >=stealth] (uc4) -- (uc4a);
+    \draw [dashed, thick, ->, >=stealth] (uc4) -- (uc4b);
+    \draw [dashed, thick, ->, >=stealth] (uc5) -- (uc5a);
+    \draw [dashed, thick, ->, >=stealth] (uc5) -- (uc5b);
+    \draw [dashed, thick, ->, >=stealth] (uc6) -- (uc6a);
+    \draw [dashed, thick, ->, >=stealth] (uc6) -- (uc6b);
 
     % Draw Associations - Customer
-    \draw [thick, -{Latex}] (cust) -- (uc_reg.west);
-    \draw [thick, -{Latex}] (cust) -- (uc_auth.west);
-    \draw [thick, -{Latex}] (cust) -- (uc_bal.west);
-    \draw [thick, -{Latex}] (cust) -- (uc_trans.west);
-    \draw [thick, -{Latex}] (cust) -- (uc_bill.west);
-    \draw [thick, -{Latex}] (cust) -- (uc_rep.west);
+    \draw [thick, -{Latex}] (cust) -- (uc1.west);
+    \draw [thick, -{Latex}] (cust) -- (uc2.west);
+    \draw [thick, -{Latex}] (cust) -- (uc3.west);
+    \draw [thick, -{Latex}] (cust) -- (uc4.west);
+    \draw [thick, -{Latex}] (cust) -- (uc5.west);
+    \draw [thick, -{Latex}] (cust) -- (uc6.west);
 
-    % Draw Associations - Corporate
-    \draw [thick, -{Latex}] (corp) -- (uc_auth.west);
-    \draw [thick, -{Latex}] (corp) -- (uc_trans.west);
-    \draw [thick, -{Latex}] (corp) -- (uc_rep.west);
+    % Draw Associations - Corporate Customer
+    \draw [thick, -{Latex}] (corp) -- (uc2.west);
+    \draw [thick, -{Latex}] (corp) -- (uc4.west);
+    \draw [thick, -{Latex}] (corp) -- (uc6.west);
 
     % Draw Associations - Admin
-    \draw [thick, -{Latex}] (admin) -- (uc_auth.east);
-    \draw [thick, -{Latex}] (admin) -- (uc_sys.east);
+    \draw [thick, -{Latex}] (admin) -- (uc2.east);
+    \draw [thick, -{Latex}] (admin) -- (uc7.east);
+    \draw [thick, -{Latex}] (admin) -- (uc8.east);
 
     % Draw Associations - Teller
-    \draw [thick, -{Latex}] (teller) -- (uc_auth.east);
-    \draw [thick, -{Latex}] (teller) -- (uc_bal.east);
-    \draw [thick, -{Latex}] (teller) -- (uc_rep.east);
+    \draw [thick, -{Latex}] (teller) -- (uc2.east);
+    \draw [thick, -{Latex}] (teller) -- (uc3.east);
+    \draw [thick, -{Latex}] (teller) -- (uc6.east);
+    \draw [thick, -{Latex}] (teller) -- (uc8.east);
 
-    % Draw Associations - Shetab
-    \draw [thick, -{Latex}] (uc_trans.east) -- (shetab);
+    % Draw Associations - External Services
+    \draw [thick, -{Latex}] (uc1) -- (id_ver.east);
+    \draw [thick, -{Latex}] (uc5) -- (utility.east);
+    \draw [thick, -{Latex}] (uc4) -- (shetab.west);
+    \draw [thick, -{Latex}] (uc1) -- (sms.west);
+    \draw [thick, -{Latex}] (uc2) -- (sms.west);
+    \draw [thick, -{Latex}] (uc4) -- (sms.west);
+    \draw [thick, -{Latex}] (uc5) -- (sms.west);
 
 \end{tikzpicture}
-\caption{UML Use Case Diagram: User boundaries and actors mapping.}
+\caption{UML Use Case Diagram: Relationships between actors and core use cases with inclusion models.}
 \label{fig:use_case}
 \end{figure}
+
 
 \newpage
 \subsection{UML Sequence Diagram (Domestic Fund Transfer Workflow)}
@@ -526,6 +680,294 @@ The sequence diagram below represents the step-by-step messaging workflow betwee
 \end{figure}
 
 \newpage
+
+\subsection{UML Activity Diagrams}
+UML Activity Diagrams map the dynamic control flows and decision behaviors within the Online Banking System. The diagrams below model the sequential actions, choices, and terminal states for each of the eight primary use cases (UC1 to UC8).
+
+\subsubsection{AD1: Register Account \& AD2: Login with MFA}
+The Register Account activity diagram (AD1) models the sequential control flow of customer onboarding. The process begins with the inputs of user profile details, which are verified on the server side against format and cryptographic constraints. If validation fails, an error is rendered, prompting the user to correct the inputs. Upon successful validation, the system initiates the MFA setup by issuing an out-of-band OTP. A second decision gateway verifies the OTP entry; successful validation triggers the creation of the database records and initializes the MFA key, concluding the registration process.
+
+The Login with MFA workflow (AD2) outlines the session authentication lifecycle. The system prompts for primary user credentials and validates the hashed password against database tables. If the password matches, the login flow moves to secondary challenge verification, dispatching a dynamic token. If the user successfully inputs the matching OTP within the time window, the system generates a secure session token and redirects the client to their customized dashboard, safeguarding the system from credential abuse.
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{0.48\textwidth}
+  \centering
+  \begin{tikzpicture}[node distance=0.8cm, scale=0.75, transform shape]
+      \node (start) [actstart] {};
+      \node (input) [activity, below=of start] {Enter Registration Info};
+      \node (validate) [activity, below=of input] {Validate Input Data};
+      \node (dec1) [decision, below=of validate] {Valid?};
+      \node (send_otp) [activity, below=of dec1, yshift=-0.1cm] {Send Verification OTP};
+      \node (verify) [activity, below=of send_otp] {Verify User OTP};
+      \node (dec2) [decision, below=of verify] {Match?};
+      \node (create) [activity, below=of dec2, yshift=-0.1cm] {Create Account \& MFA};
+      \node (end) [actend, below=of create] {};
+      
+      \node (error1) [activity, right=of dec1, xshift=0.3cm] {Show Validation Error};
+      \node (error2) [activity, right=of dec2, xshift=0.3cm] {Show OTP Error};
+
+      \path [flow] (start) -- (input);
+      \path [flow] (input) -- (validate);
+      \path [flow] (validate) -- (dec1);
+      \path [flow] (dec1) -- node [near start] {Y} (send_otp);
+      \path [flow] (dec1) -- node {N} (error1);
+      \path [flow] (error1) |- (input);
+      \path [flow] (send_otp) -- (verify);
+      \path [flow] (verify) -- (dec2);
+      \path [flow] (dec2) -- node [near start] {Y} (create);
+      \path [flow] (dec2) -- node {N} (error2);
+      \path [flow] (error2) |- (verify);
+      \path [flow] (create) -- (end);
+  \end{tikzpicture}
+  \caption{AD1: Register Account Activity Flow}
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+  \centering
+  \begin{tikzpicture}[node distance=0.8cm, scale=0.75, transform shape]
+      \node (start) [actstart] {};
+      \node (input) [activity, below=of start] {Enter Credentials};
+      \node (validate) [activity, below=of input] {Validate Password};
+      \node (dec1) [decision, below=of validate] {Match?};
+      \node (send_otp) [activity, below=of dec1, yshift=-0.1cm] {Send OTP Challenge};
+      \node (verify) [activity, below=of send_otp] {Verify OTP Code};
+      \node (dec2) [decision, below=of verify] {Match?};
+      \node (session) [activity, below=of dec2, yshift=-0.1cm] {Create Session \& Redirect};
+      \node (end) [actend, below=of session] {};
+      
+      \node (error1) [activity, right=of dec1, xshift=0.3cm] {Show Password Error};
+      \node (error2) [activity, right=of dec2, xshift=0.3cm] {Show OTP Error};
+
+      \path [flow] (start) -- (input);
+      \path [flow] (input) -- (validate);
+      \path [flow] (validate) -- (dec1);
+      \path [flow] (dec1) -- node [near start] {Y} (send_otp);
+      \path [flow] (dec1) -- node {N} (error1);
+      \path [flow] (error1) |- (input);
+      \path [flow] (send_otp) -- (verify);
+      \path [flow] (verify) -- (dec2);
+      \path [flow] (dec2) -- node [near start] {Y} (session);
+      \path [flow] (dec2) -- node {N} (error2);
+      \path [flow] (error2) |- (verify);
+      \path [flow] (session) -- (end);
+  \end{tikzpicture}
+  \caption{AD2: Login with MFA Activity Flow}
+\end{minipage}
+\end{figure}
+
+\newpage
+
+\subsubsection{AD3: View Balance \& AD4: Transfer Funds}
+The View Balance activity diagram (AD3) traces a lightweight read-only operation. The client requests a balance inquiry, passing their authenticated session token. The application server validates the token structure and queries the core account ledger. If database connectivity or ledger retrieval fails, the system renders an error message. Otherwise, it compiles the ledger balances and updates the user interface, reflecting real-time account values.
+
+The Funds Transfer diagram (AD4) manages a highly critical, multi-stage state modification. The user inputs transaction details, including the target IBAN and amount. The system first checks that the source account holds sufficient funds to cover the transfer amount and transaction fees. If valid, the system validates the format and active status of the destination IBAN. Once these checks clear, the system prompts the user for authentication confirmation, executes the debit and credit actions atomically under database transaction locks, and invokes the SMS gateway API to dispatch receipts to both parties.
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{0.48\textwidth}
+  \centering
+  \begin{tikzpicture}[node distance=0.8cm, scale=0.75, transform shape]
+      \node (start) [actstart] {};
+      \node (request) [activity, below=of start] {Request Account Balance};
+      \node (auth) [activity, below=of request] {Verify Session Token};
+      \node (query) [activity, below=of auth] {Query Account Ledger};
+      \node (dec) [decision, below=of query] {Found?};
+      \node (display) [activity, below=of dec, yshift=-0.1cm] {Display Balance Screen};
+      \node (end) [actend, below=of display] {};
+      
+      \node (error) [activity, right=of dec, xshift=0.3cm] {Show Database Error};
+      \node (end_err) [actend, below=of error] {};
+
+      \path [flow] (start) -- (request);
+      \path [flow] (request) -- (auth);
+      \path [flow] (auth) -- (query);
+      \path [flow] (query) -- (dec);
+      \path [flow] (dec) -- node [near start] {Y} (display);
+      \path [flow] (dec) -- node {N} (error);
+      \path [flow] (display) -- (end);
+      \path [flow] (error) -- (end_err);
+  \end{tikzpicture}
+  \caption{AD3: View Balance Activity Flow}
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+  \centering
+  \begin{tikzpicture}[node distance=0.72cm, scale=0.75, transform shape]
+      \node (start) [actstart] {};
+      \node (details) [activity, below=of start] {Enter Transfer Details};
+      \node (val_bal) [activity, below=of details] {Validate Balance \& Fees};
+      \node (dec1) [decision, below=of val_bal] {Funds OK?};
+      \node (val_dest) [activity, below=of dec1, yshift=-0.1cm] {Validate Dest IBAN};
+      \node (dec2) [decision, below=of val_dest] {Active?};
+      \node (execute) [activity, below=of dec2, yshift=-0.1cm] {Debit/Credit Ledgers};
+      \node (sms) [activity, below=of execute] {Send SMS Receipt};
+      \node (end) [actend, below=of sms] {};
+      
+      \node (err_bal) [activity, right=of dec1, xshift=0.3cm] {Show Fund Error};
+      \node (err_dest) [activity, right=of dec2, xshift=0.3cm] {Show IBAN Error};
+      \node (end_err1) [actend, below=of err_bal] {};
+      \node (end_err2) [actend, below=of err_dest] {};
+
+      \path [flow] (start) -- (details);
+      \path [flow] (details) -- (val_bal);
+      \path [flow] (val_bal) -- (dec1);
+      \path [flow] (dec1) -- node [near start] {Y} (val_dest);
+      \path [flow] (dec1) -- node {N} (err_bal);
+      \path [flow] (err_bal) -- (end_err1);
+      \path [flow] (val_dest) -- (dec2);
+      \path [flow] (dec2) -- node [near start] {Y} (execute);
+      \path [flow] (dec2) -- node {N} (err_dest);
+      \path [flow] (err_dest) -- (end_err2);
+      \path [flow] (execute) -- (sms);
+      \path [flow] (sms) -- (end);
+  \end{tikzpicture}
+  \caption{AD4: Transfer Funds Activity Flow}
+\end{minipage}
+\end{figure}
+
+\newpage
+
+\subsubsection{AD5: Pay Utility Bill \& AD6: Generate Statement}
+The Pay Utility Bill activity diagram (AD5) describes the system's integration with external biller APIs. The customer selects the utility biller and provides a billing reference token. The system queries the external provider's API to fetch outstanding balances. If a balance is due, the application checks checking ledger availability, debits the account, transmits the payment approval back to the utility gateway, and prints a settlement confirmation.
+
+The Generate Statement workflow (AD6) details the document compilation engine's flow. The user specifies filter parameters (such as transaction type and date range). The server validates the parameters, ensuring dates are chronological. It then executes database query operations to fetch matching records. If records exist, the server formats the transaction history, generates a secure PDF, and streams the document to the browser, wrapping up a clean read operation.
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{0.48\textwidth}
+  \centering
+  \begin{tikzpicture}[node distance=0.72cm, scale=0.75, transform shape]
+      \node (start) [actstart] {};
+      \node (select) [activity, below=of start] {Select Biller \& Token};
+      \node (fetch) [activity, below=of select] {Fetch Bill from Provider};
+      \node (dec1) [decision, below=of fetch] {Due $>$ 0?};
+      \node (val) [activity, below=of dec1, yshift=-0.1cm] {Validate Balance};
+      \node (dec2) [decision, below=of val] {Funds OK?};
+      \node (debit) [activity, below=of dec2, yshift=-0.1cm] {Debit \& Pay Biller};
+      \node (receipt) [activity, below=of debit] {Generate Receipt};
+      \node (end) [actend, below=of receipt] {};
+      
+      \node (err_due) [activity, right=of dec1, xshift=0.3cm] {Show No Outstanding};
+      \node (err_bal) [activity, right=of dec2, xshift=0.3cm] {Show Balance Error};
+      \node (end_err1) [actend, below=of err_due] {};
+      \node (end_err2) [actend, below=of err_bal] {};
+
+      \path [flow] (start) -- (select);
+      \path [flow] (select) -- (fetch);
+      \path [flow] (fetch) -- (dec1);
+      \path [flow] (dec1) -- node [near start] {Y} (val);
+      \path [flow] (dec1) -- node {N} (err_due);
+      \path [flow] (err_due) -- (end_err1);
+      \path [flow] (val) -- (dec2);
+      \path [flow] (dec2) -- node [near start] {Y} (debit);
+      \path [flow] (dec2) -- node {N} (err_bal);
+      \path [flow] (err_bal) -- (end_err2);
+      \path [flow] (debit) -- (receipt);
+      \path [flow] (receipt) -- (end);
+  \end{tikzpicture}
+  \caption{AD5: Pay Utility Bill Activity Flow}
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+  \centering
+  \begin{tikzpicture}[node distance=0.72cm, scale=0.75, transform shape]
+      \node (start) [actstart] {};
+      \node (select) [activity, below=of start] {Select Date Range \& Filters};
+      \node (val) [activity, below=of select] {Validate Date Range};
+      \node (dec1) [decision, below=of val] {Valid?};
+      \node (query) [activity, below=of dec1, yshift=-0.1cm] {Query Transactions DB};
+      \node (dec2) [decision, below=of query] {Records?};
+      \node (compile) [activity, below=of dec2, yshift=-0.1cm] {Compile Statement PDF};
+      \node (download) [activity, below=of compile] {Initiate PDF Download};
+      \node (end) [actend, below=of download] {};
+      
+      \node (err_val) [activity, right=of dec1, xshift=0.3cm] {Show Parameter Error};
+      \node (err_empty) [activity, right=of dec2, xshift=0.3cm] {Show Empty Warning};
+      \node (end_err1) [actend, below=of err_val] {};
+      \node (end_err2) [actend, below=of err_empty] {};
+
+      \path [flow] (start) -- (select);
+      \path [flow] (select) -- (val);
+      \path [flow] (val) -- (dec1);
+      \path [flow] (dec1) -- node [near start] {Y} (query);
+      \path [flow] (dec1) -- node {N} (err_val);
+      \path [flow] (err_val) -- (end_err1);
+      \path [flow] (query) -- (dec2);
+      \path [flow] (dec2) -- node [near start] {Y} (compile);
+      \path [flow] (dec2) -- node {N} (err_empty);
+      \path [flow] (err_empty) -- (end_err2);
+      \path [flow] (compile) -- (download);
+      \path [flow] (download) -- (end);
+  \end{tikzpicture}
+  \caption{AD6: Generate Statement Activity Flow}
+\end{minipage}
+\end{figure}
+
+\newpage
+
+\subsubsection{AD7: Manage Backups \& AD8: Review Transaction Logs}
+The Manage Backups diagram (AD7) models the background administrative disaster recovery flow. Activated by an automated cron scheduler, the backup subsystem generates an encrypted snapshot of the database volumes. The system checks the file integrity against checksums. If integrity is confirmed, the snapshot is uploaded to offsite cloud storage. Failures trigger immediate notifications to the IT administration panel, ensuring data reliability.
+
+The Review Transaction Logs diagram (AD8) handles compliance and auditing workflows. Tellers and Administrators access the audit dashboard to search security logs using filters. The query compiles matching records from the immutable audit database. If logs are found, they are formatted and displayed. Security flags or critical violations prompt immediate escalations, ensuring real-time auditing and regulatory tracking.
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{0.48\textwidth}
+  \centering
+  \begin{tikzpicture}[node distance=0.8cm, scale=0.75, transform shape]
+      \node (start) [actstart] {};
+      \node (trigger) [activity, below=of start] {Trigger Backup Scheduler};
+      \node (snap) [activity, below=of trigger] {Generate Encrypted Snapshot};
+      \node (verify) [activity, below=of snap] {Verify Snapshot Integrity};
+      \node (dec) [decision, below=of verify] {Integrity OK?};
+      \node (store) [activity, below=of dec, yshift=-0.1cm] {Upload to Offsite Cloud};
+      \node (end) [actend, below=of store] {};
+      
+      \node (err) [activity, right=of dec, xshift=0.3cm] {Log Failure \& Alert IT};
+      \node (end_err) [actend, below=of err] {};
+
+      \path [flow] (start) -- (trigger);
+      \path [flow] (trigger) -- (snap);
+      \path [flow] (snap) -- (verify);
+      \path [flow] (verify) -- (dec);
+      \path [flow] (dec) -- node [near start] {Y} (store);
+      \path [flow] (dec) -- node {N} (err);
+      \path [flow] (store) -- (end);
+      \path [flow] (err) -- (end_err);
+  \end{tikzpicture}
+  \caption{AD7: Manage Backups Activity Flow}
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+  \centering
+  \begin{tikzpicture}[node distance=0.8cm, scale=0.75, transform shape]
+      \node (start) [actstart] {};
+      \node (console) [activity, below=of start] {Open Audit Console};
+      \node (filter) [activity, below=of console] {Apply Filters};
+      \node (query) [activity, below=of filter] {Query Audit Log DB};
+      \node (dec) [decision, below=of query] {Records?};
+      \node (render) [activity, below=of dec, yshift=-0.1cm] {Display Logs List};
+      \node (end) [actend, below=of render] {};
+      
+      \node (err) [activity, right=of dec, xshift=0.3cm] {Show No Records Found};
+      \node (end_err) [actend, below=of err] {};
+
+      \path [flow] (start) -- (console);
+      \path [flow] (console) -- (filter);
+      \path [flow] (filter) -- (query);
+      \path [flow] (query) -- (dec);
+      \path [flow] (dec) -- node [near start] {Y} (render);
+      \path [flow] (dec) -- node {N} (err);
+      \path [flow] (render) -- (end);
+      \path [flow] (err) -- (end_err);
+  \end{tikzpicture}
+  \caption{AD8: Review Transaction Logs Activity Flow}
+\end{minipage}
+\end{figure}
+
+
+\newpage
 % =========================================================================
 % SECTION 6: REQUIREMENTS TRACEABILITY & VERIFICATION MATRIX
 % =========================================================================
@@ -537,10 +979,11 @@ The matrix below maps the functional requirements to their respective verificati
 
 \begin{table}[H]
 \centering
-\caption{Online Banking System - Functional Traceability Matrix}
-\label{tab:functional_rtm}
-\small
-\begin{tabular}{p{2.2cm} p{1.6cm} p{3.2cm} p{2.8cm} p{5.2cm}}
+\caption{Online Banking System - Functional Traceability Matrix (Part 1)}
+\label{tab:functional_rtm_1}
+\footnotesize
+\singlespacing
+\begin{tabular}{p{2.0cm} p{1.4cm} p{2.6cm} p{2.6cm} p{4.8cm}}
 \toprule
 \textbf{Req. ID} & \textbf{Priority} & \textbf{Category} & \textbf{Verification Method} & \textbf{Verification / Testing Scenario} \\ \midrule
 \textbf{OBS-FR-01} & Must & Authentication & Demonstration & Verify new account signup flows and database hash check. \\ \midrule
@@ -552,7 +995,21 @@ The matrix below maps the functional requirements to their respective verificati
 \textbf{OBS-FR-07} & Should & UI/UX & Demonstration & Visual rendering checks across various browser viewport widths. \\ \midrule
 \textbf{OBS-FR-08} & Should & UI/UX & Inspection & Run screen-reader compliance check (WCAG 2.1 AA checklist). \\ \midrule
 \textbf{OBS-FR-09} & Must & Reporting & Test & Initiate statement generation and measure time-to-download. \\ \midrule
-\textbf{OBS-FR-10} & Could & Reporting & Demonstration & Check cron trigger at month-end and confirm PDF attachment delivery. \\ \midrule
+\textbf{OBS-FR-10} & Could & Reporting & Demonstration & Check cron trigger at month-end and confirm PDF attachment delivery. \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\newpage
+
+\begin{table}[H]
+\centering
+\caption{Online Banking System - Functional Traceability Matrix (Part 2)}
+\label{tab:functional_rtm_2}
+\footnotesize
+\singlespacing
+\begin{tabular}{p{2.0cm} p{1.4cm} p{2.6cm} p{2.6cm} p{4.8cm}}
+\toprule
+\textbf{Req. ID} & \textbf{Priority} & \textbf{Category} & \textbf{Verification Method} & \textbf{Verification / Testing Scenario} \\ \midrule
 \textbf{OBS-FR-11} & Must & Third-Party & Test & Verify Shetab API response and cert handshake. \\ \midrule
 \textbf{OBS-FR-12} & Must & Third-Party & Demonstration & Confirm asynchronous SMS delivery upon transfers $>$ \$10.00. \\ \midrule
 \textbf{OBS-FR-13} & Should & Error Handling & Demonstration & Trigger timeout exception and confirm modal text display. \\ \midrule
@@ -575,11 +1032,12 @@ The matrix below maps the non-functional requirements to their respective verifi
 \centering
 \caption{Online Banking System - Non-Functional Traceability Matrix}
 \label{tab:nonfunctional_rtm}
-\small
-\begin{tabular}{p{2.2cm} p{1.6cm} p{3.2cm} p{2.8cm} p{5.2cm}}
+\footnotesize
+\singlespacing
+\begin{tabular}{p{2.0cm} p{1.4cm} p{2.6cm} p{2.6cm} p{4.8cm}}
 \toprule
 \textbf{Req. ID} & \textbf{Priority} & \textbf{Category} & \textbf{Verification Method} & \textbf{Verification / Testing Scenario} \\ \midrule
-\textbf{OBS-NFR-01} & Should & Usability & Test & Usability studies (measure signup setup duration/onboarding time). \\ \midrule
+\textbf{OBS-NFR-01} & Should & Usability & Test & Usability studies (measure signup duration/onboarding time). \\ \midrule
 \textbf{OBS-NFR-02} & Must & Security & Inspection & Audit system volumes and API ports to confirm AES-256/TLS 1.3. \\ \midrule
 \textbf{OBS-NFR-03} & Must & Security & Inspection & Verify database hash salt strength and Argon2id config parameters. \\ \midrule
 \textbf{OBS-NFR-04} & Must & Reliability & Test & Induce process kills mid-transfer and verify rollback completion. \\ \midrule
