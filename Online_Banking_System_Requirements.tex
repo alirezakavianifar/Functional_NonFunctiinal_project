@@ -525,11 +525,12 @@ Furthermore, key dependency relationships are modeled. The Register Account (UC1
     node distance=1.5cm and 2.5cm,
     usecase/.style={ellipse, draw=secondaryblue, fill=lightbg, minimum width=2.5cm, minimum height=0.9cm, align=center, font=\scriptsize, thick, drop shadow},
     subusecase/.style={ellipse, draw=accentteal, fill=lightbg, minimum width=2.2cm, minimum height=0.8cm, align=center, font=\tiny, thick, drop shadow},
-    boundary/.style={rectangle, draw=bordergray, fill=primaryblue!2, minimum width=8.5cm, minimum height=17cm, thick, rounded corners}
+    boundary/.style={rectangle, draw=bordergray, fill=primaryblue!2, minimum width=8.5cm, minimum height=18cm, thick, rounded corners}
 ]
 
     % Draw System Boundary
-    \node (sys) [boundary, label={[anchor=north, font=\normalsize\bfseries, text=primaryblue]north:Online Banking System (OBS) Boundary}] at (0, -0.5) {};
+    \node (sys) [boundary] at (0, -0.2) {};
+    \node[anchor=north, font=\normalsize\bfseries, text=primaryblue, yshift=-0.2cm] at (sys.north) {Online Banking System (OBS) Boundary};
 
     % Left Actors
     \drawactor{-6.5}{6.5}{id_ver}{Identity Verification\\Service}
